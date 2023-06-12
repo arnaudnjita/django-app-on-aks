@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pollsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pollsapp
+  template:
+    metadata:
+      labels:
+        app: pollsapp
+    spec:
+      containers:
+      - name: pollsapp
+        image: djangoappacr.azurecr.io/pollsapp:v2
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_HOST
+          value: "django-db-server.postgres.database.azure.com"
+        - name: DATABASE_USER
+          value: "njita"
+        - name: DATABASE_PASSWORD
+          value: "111111amM"
+        - name: DATABASE_NAME
+          value: "djangodb"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - pollsapp
+              topologyKey: "kubernetes.io/hostname"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-svc
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  selector:
+    app: pollsapp
