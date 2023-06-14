@@ -1,9 +1,3 @@
----
-services: app-service\web,app-service
-platforms: python
-author: cephalin
----
-
 # Django and PostgreSQL sample for Azure App Service
 
 This samples is a simple Django app that connects to a PostgreSQL database. The sample is used in the tutorial https://learn.microsoft.com/azure/postgresql/flexible-server/tutorial-django-app-service-postgres](Deploy Django app with App Service and Azure Database for PostgreSQL - Flexible Server).
